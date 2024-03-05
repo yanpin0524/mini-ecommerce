@@ -1,8 +1,46 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+# from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
 # Create your models here.
+class UserManager(BaseUserManager):
+    def create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("User must have an email address")
+
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True")
+
+        user = self.create_user(email, password, **extra_fields)
+
+        return user
+
+class User(AbstractUser):
+    email = models.EmailField(max_length=255, unique=True)
+    username = None
+    first_name = None
+    last_name = None
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+
 class Product(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
