@@ -1,6 +1,4 @@
 from django.db import models
-
-# from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
@@ -9,6 +7,9 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError("User must have an email address")
+
+        if not password:
+            raise ValueError("User must have a password")
 
         user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
@@ -29,6 +30,7 @@ class UserManager(BaseUserManager):
 
         return user
 
+
 class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
     username = None
@@ -43,30 +45,42 @@ class User(AbstractUser):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=False, blank=False
+    )
     description = models.TextField(null=False, blank=False)
     image = models.ImageField(upload_to="products", null=False, blank=False)
 
+    def __str__(self):
+        return self.name
+
 
 class CartItem(models.Model):  # 購物車中的商品
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False)
 
     class Meta:
-        unique_together = ("user_id", "product_id")
+        unique_together = ("user", "product")
+
+    def __str__(self):
+        return f"{self.user} - {self.product}"
 
 
 class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    delivery_status = models.BooleanField(default=False)  # False = Not Delivered, True = Delivered
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    delivery_status = models.BooleanField(
+        default=False
+    )  # False = Not Delivered, True = Delivered
 
 
 class OrderItem(models.Model):  # 訂單中的商品
-    order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=False, blank=False
+    )
     quantity = models.IntegerField(null=False, blank=False)
 
     class Meta:
-        unique_together = ("order_id", "product_id")
+        unique_together = ("order", "product")
