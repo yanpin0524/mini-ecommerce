@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -12,6 +12,9 @@ class ProductView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = serializers.ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["name", "description"]
+    ordering_fields = ["name", "price"]
 
 
 class SingleProductView(generics.RetrieveUpdateDestroyAPIView):
