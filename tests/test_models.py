@@ -61,9 +61,9 @@ class ProductModelTestCase(TestCase):
         )
 
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         Product.objects.all().delete()
-        os.remove(f"images/products/{self.test_image.name}")
+        os.remove(f"images/products/{cls.test_image.name}")
 
     def test_create_product(self):
         self.assertEqual(self.product.name, "product1")
