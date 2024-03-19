@@ -24,7 +24,6 @@ class SingleProductView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CartItemView(generics.ListAPIView, generics.DestroyAPIView, APIView):
-    queryset = CartItem.objects.all()
     serializer_class = serializers.CartItemSerializer
 
     def post(self, request):
@@ -36,6 +35,10 @@ class CartItemView(generics.ListAPIView, generics.DestroyAPIView, APIView):
         serialized_item.save()
 
         return Response(serialized_item.data, status.HTTP_201_CREATED)
+    
+    def get_queryset(self):
+        user = self.request.user
+        return CartItem.objects.filter(user_id=user.id)
 
 
 class SingleCartItemView(generics.DestroyAPIView):
@@ -82,6 +85,9 @@ class OrderView(generics.ListCreateAPIView, APIView):
             status.HTTP_201_CREATED,
         )
 
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user_id=user.id)
 
 class SingleOrderView(generics.RetrieveDestroyAPIView):
     queryset = Order.objects.all()
