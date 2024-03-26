@@ -23,7 +23,7 @@ class SingleProductView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
 
 
-class CartItemView(generics.ListAPIView, generics.DestroyAPIView, APIView):
+class CartItemView(generics.ListAPIView, APIView):
     serializer_class = serializers.CartItemSerializer
 
     def post(self, request):
@@ -36,6 +36,11 @@ class CartItemView(generics.ListAPIView, generics.DestroyAPIView, APIView):
 
         return Response(serialized_item.data, status.HTTP_201_CREATED)
     
+    def delete(self, request):
+        user = request.user
+        CartItem.objects.filter(user_id=user.id).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def get_queryset(self):
         user = self.request.user
         return CartItem.objects.filter(user_id=user.id)
