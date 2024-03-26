@@ -104,7 +104,6 @@ class TestCartEndpoints(TestCase):
         self.assertEqual(json.loads(response.content)["quantity"], 10)
 
     def test_clear_my_cart(self):
-        print(CartItem.objects.all())
         response = self.client.delete("/api/cart/")
 
         self.assertEqual(response.status_code, 204)
@@ -119,10 +118,7 @@ class TestCartEndpoints(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        CartItem.objects.all().delete()
-        Product.objects.all().delete()
-        User.objects.all().delete()
-
         os.remove(f"images/products/{cls.image.name}")
         os.remove(f"images/products/{cls.image2.name}")
+
         cls.image_file.close()
