@@ -8,7 +8,7 @@ from PIL import Image
 from shop.models import User, Product
 
 
-class TestProductEndpoint(TestCase):
+class TestProductEndpoints(TestCase):
 
     @classmethod
     def setUpTestData(cls):
