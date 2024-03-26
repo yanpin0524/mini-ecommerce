@@ -35,7 +35,7 @@ class CartItemView(generics.ListAPIView, APIView):
         serialized_item.save()
 
         return Response(serialized_item.data, status.HTTP_201_CREATED)
-    
+
     def delete(self, request):
         user = request.user
         CartItem.objects.filter(user_id=user.id).delete()
@@ -94,10 +94,31 @@ class OrderView(generics.ListCreateAPIView, APIView):
         user = self.request.user
         return Order.objects.filter(user_id=user.id)
 
-class SingleOrderView(generics.RetrieveDestroyAPIView):
+
+class SingleOrderView(generics.DestroyAPIView, APIView):
     queryset = Order.objects.all()
     serializer_class = serializers.OrderSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+    def get(self, request, pk):
+        order = Order.objects.get(id=pk)
+        order_items = OrderItem.objects.filter(order_id=pk)
+
+        if (request.user.id != order.user_id) and (not request.user.is_superuser):
+            return Response(
+                {"error": "Unauthorized access to order details"},
+                status.HTTP_403_FORBIDDEN,
+            )
+
+        serialized_order = serializers.OrderSerializer(order)
+        serialized_order_items = serializers.OrderItemSerializer(order_items, many=True)
+
+        return Response(
+            {
+                "order": serialized_order.data,
+                "order_items": serialized_order_items.data,
+            }
+        )
 
 
 class OrderDeliveryStatusView(generics.UpdateAPIView):
