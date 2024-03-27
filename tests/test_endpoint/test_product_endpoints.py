@@ -136,6 +136,9 @@ class TestProductEndpoints(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        Product.objects.all().delete()
+        User.objects.all().delete()
+
         os.remove(f"images/products/{cls.image.name}")
 
         cls.image_file.close()

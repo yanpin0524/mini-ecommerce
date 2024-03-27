@@ -148,6 +148,12 @@ class TestOrderEndpoints(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        OrderItem.objects.all().delete()
+        Order.objects.all().delete()
+        CartItem.objects.all().delete()
+        Product.objects.all().delete()
+        User.objects.all().delete()
+
         os.remove(f"images/products/{cls.image.name}")
         os.remove(f"images/products/{cls.image2.name}")
 
