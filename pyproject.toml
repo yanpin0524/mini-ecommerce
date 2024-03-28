@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mini-ecommerce"
+version = "0.1.0"
+description = ""
+authors = ["Yanpin <a131234568@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11.8"
+django = "^4.1"
+djangorestframework = "^3.15.1"
+mysqlclient = "^2.2.4"
+djangorestframework-simplejwt = "^5.3.1"
+djoser = "^2.2.2"
+pillow = "^10.2.0"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
