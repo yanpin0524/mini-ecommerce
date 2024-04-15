@@ -1,0 +1,20 @@
+services:
+  mysql-db:
+    container_name: mini-ecommerce-db
+    image: mysql
+    ports:
+      - "13306:3306"
+    environment:
+      - MYSQL_USER=${db_user}
+      - MYSQL_PASSWORD=${db_password}
+      - MYSQL_DATABASE=${db_name}
+    networks:
+      mini-ecommerce-bridge:
+  django-api:
+    container_name: mini-ecommerce-api
+    build:
+      context: .
+    image: yanpin0524/mini-ecommerce-api
+    ports:
+      - "8080:8080"
+    command: ./wait-for-it.sh mini-ecommerce-db:13306 -- python manage.py runserver
