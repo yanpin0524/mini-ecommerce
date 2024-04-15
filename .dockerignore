@@ -1,0 +1,10 @@
+.DS_Store
+.vscode
+.venv
+.env
+.env.example
+.git
+.gitignore
+images
+*__pycache__
+README.md
