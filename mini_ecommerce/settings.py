@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("django_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # todo: 在開發完成後將 debug 改成 False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = eval(os.environ.get("allowed_hosts")) or []
 
 AUTH_USER_MODEL = "shop.User"
 
