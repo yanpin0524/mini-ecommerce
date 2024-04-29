@@ -1,5 +1,5 @@
-# mini eCommerce API
-mini eCommerce API 是一個用於簡易電商網站後端的API
+# mini eCommerce
+mini eCommerce 是個簡易的虛構電商網站
 
 ## Requirements
 
