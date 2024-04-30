@@ -1,59 +1,10 @@
-from rest_framework import generics, status, filters
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .permissions import IsAdminOrReadOnly
-from .models import Product, CartItem, Order, OrderItem
+from shop.permissions import IsAdminOrReadOnly
+from shop.models import CartItem, Order, OrderItem
 import shop.serializers as serializers
-
-
-# Create your views here.
-class ProductView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
-    serializer_class = serializers.ProductSerializer
-    permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ["name", "description"]
-    ordering_fields = ["name", "price"]
-
-
-class SingleProductView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = serializers.ProductSerializer
-    permission_classes = [IsAdminOrReadOnly]
-
-
-class CartItemView(generics.ListAPIView, APIView):
-    serializer_class = serializers.CartItemSerializer
-
-    def post(self, request):
-        data = request.data.copy()
-        data["user_id"] = request.user.id
-
-        serialized_item = serializers.CartItemSerializer(data=data)
-        serialized_item.is_valid(raise_exception=True)
-        serialized_item.save()
-
-        return Response(serialized_item.data, status.HTTP_201_CREATED)
-
-    def delete(self, request):
-        user = request.user
-        CartItem.objects.filter(user_id=user.id).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_queryset(self):
-        user = self.request.user
-        return CartItem.objects.filter(user_id=user.id)
-
-
-class SingleCartItemView(generics.DestroyAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = serializers.CartItemSerializer
-
-
-class CartItemQuantityView(generics.UpdateAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = serializers.CartItemQuantitySerializer
 
 
 class OrderView(generics.ListCreateAPIView, APIView):
