@@ -14,11 +14,11 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
-  django-api:
-    container_name: mini-ecommerce-api
+  django-app:
+    container_name: mini-ecommerce-app
     build:
       context: .
-    image: yanpin0524/mini-ecommerce-api
+    image: yanpin0524/mini-ecommerce-app
     ports:
       - "8000:8000"
     environment:
