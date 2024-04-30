@@ -1,10 +1,21 @@
-# mini eCommerce
-mini eCommerce 是個簡易的虛構電商網站
+# mini-eCommerce
+mini-eCommerce is a virtual online shop built by the Django framework.
 
-## Requirements
+# Visuals
 
-## Technologies Used
+# Built With
+- Django
+- Django REST framework
+- Bootstrap
+- MySQL
+
+# Getting
+## Prerequisites
 
 ## Installation
 
-## Demo
+# API Usage
+To know how to use please refer to the [API Documentation]().
+
+## Author
+[@yanpin0524](https://github.com/yanpin0524)
