@@ -9,7 +9,7 @@ mini-eCommerce is a virtual online shop built by the Django framework.
 - Bootstrap
 - MySQL
 
-# Getting
+# Getting Started
 ## Prerequisites
 
 ## Installation
