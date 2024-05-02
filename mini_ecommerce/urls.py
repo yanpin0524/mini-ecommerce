@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/', include('shop.urls')),
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.jwt')),
-    path('/', include('shop_web.urls')),
+    path('', include('shop_web.urls')),
 ]
 
 # add media url to urlpatterns
