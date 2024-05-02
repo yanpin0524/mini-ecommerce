@@ -1,55 +1,54 @@
+import io
 import json
 import os
-import io
-from django.test import TestCase
+
 from django.core.files.uploadedfile import SimpleUploadedFile
-from rest_framework.test import APIClient
+from django.test import TestCase
 from PIL import Image
-from shop.models import User, Product, CartItem, Order, OrderItem
+from rest_framework.test import APIClient
+
+from shop.models import CartItem, Order, OrderItem, Product, User
 
 
 class TestOrderEndpoints(TestCase):
-
     @classmethod
     def setUpTestData(cls):
-        cls.superuser = User.objects.create_superuser(
-            email="admin@gmail.com", password="admin123"
-        )
-        cls.normal_user = User.objects.create_user(
-            email="user@gmail.com", password="user123"
-        )
+        cls.superuser = User.objects.create_superuser(email='admin@gmail.com', password='admin123')
+        cls.normal_user = User.objects.create_user(email='user@gmail.com', password='user123')
 
         # create a image for SimpleUploadedFile
-        image = Image.new("RGB", (100, 100))
+        image = Image.new('RGB', (100, 100))
         cls.image_file = io.BytesIO()
-        image.save(cls.image_file, "JPEG")  # save the image in memory
-        cls.image_file.name = "image.jpg"
+        image.save(cls.image_file, 'JPEG')  # save the image in memory
+        cls.image_file.name = 'image.jpg'
 
         cls.image_file.seek(0)
         cls.image = SimpleUploadedFile(
-            name="image.jpg",
+            name='image.jpg',
             content=cls.image_file.read(),
-            content_type="image/jpeg",
+            content_type='image/jpeg',
         )
 
         cls.image_file.seek(0)
         cls.image2 = SimpleUploadedFile(
-            name="image2.jpg",
+            name='image2.jpg',
             content=cls.image_file.read(),
-            content_type="image/jpeg",
+            content_type='image/jpeg',
         )
 
         cls.product = Product.objects.create(
-            name="Meteor Dark Ink Pen",
+            name='Meteor Dark Ink Pen',
             price=9.99,
-            description="An elegant dark ink pen with a smooth writing experience, suitable for daily use or as a gift.",
+            description="""An elegant dark ink pen with a smooth writing experience,
+            suitable for daily use or as a gift.""",
             image=cls.image,
         )
 
         cls.product2 = Product.objects.create(
-            name="Star Wars Limited Edition T-shirt",
+            name='Star Wars Limited Edition T-shirt',
             price=59.99,
-            description="A limited edition T-shirt themed around Star Wars, made from comfortable fabric, perfect for Star Wars fans to collect.",
+            description="""A limited edition T-shirt themed around Star Wars,
+            made from comfortable fabric, perfect for Star Wars fans to collect.""",
             image=cls.image2,
         )
 
@@ -91,25 +90,25 @@ class TestOrderEndpoints(TestCase):
         CartItem.objects.all().delete()
 
     def test_get_orders(self):
-        response = self.client.get("/api/orders/")
+        response = self.client.get('/api/orders/')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(json.loads(response.content)), 1)
 
     def test_get_order_details(self):
-        response = self.client.get(f"/api/orders/{self.order.id}/")
+        response = self.client.get(f'/api/orders/{self.order.id}/')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(json.loads(response.content)["order_items"]), 2)
+        self.assertEqual(len(json.loads(response.content)['order_items']), 2)
 
     def test_get_order_details_not_belong_you(self):
         order_from_other_user = Order.objects.create(user=self.superuser)
-        response = self.client.get(f"/api/orders/{order_from_other_user.id}/")
+        response = self.client.get(f'/api/orders/{order_from_other_user.id}/')
 
         self.assertEqual(response.status_code, 403)
 
     def test_create_order(self):
-        response = self.client.post("/api/orders/")
+        response = self.client.post('/api/orders/')
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Order.objects.filter(user=self.normal_user)), 2)
@@ -119,15 +118,15 @@ class TestOrderEndpoints(TestCase):
         self.client.force_authenticate(user=self.superuser)
 
         response = self.client.patch(
-            f"/api/orders/{self.order.id}/status/", {"delivered": "True"}, format="json"
+            f'/api/orders/{self.order.id}/status/', {'delivered': 'True'}, format='json'
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(json.loads(response.content)["delivered"])
+        self.assertTrue(json.loads(response.content)['delivered'])
 
     def test_update_order_status_with_non_admin(self):
         response = self.client.patch(
-            f"/api/orders/{self.order.id}/status/", {"delivered": "True"}, format="json"
+            f'/api/orders/{self.order.id}/status/', {'delivered': 'True'}, format='json'
         )
 
         self.assertEqual(response.status_code, 403)
@@ -135,14 +134,14 @@ class TestOrderEndpoints(TestCase):
     def test_delete_order(self):
         self.client.force_authenticate(user=self.superuser)
 
-        response = self.client.delete(f"/api/orders/{self.order.id}/")
+        response = self.client.delete(f'/api/orders/{self.order.id}/')
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(len(Order.objects.filter(id=self.order.id)), 0)
         self.assertEqual(len(OrderItem.objects.filter(order_id=self.order.id)), 0)
 
     def test_delete_order_with_non_admin(self):
-        response = self.client.delete(f"/api/orders/{self.order.id}/")
+        response = self.client.delete(f'/api/orders/{self.order.id}/')
 
         self.assertEqual(response.status_code, 403)
 
@@ -154,7 +153,7 @@ class TestOrderEndpoints(TestCase):
         Product.objects.all().delete()
         User.objects.all().delete()
 
-        os.remove(f"images/products/{cls.image.name}")
-        os.remove(f"images/products/{cls.image2.name}")
+        os.remove(f'images/products/{cls.image.name}')
+        os.remove(f'images/products/{cls.image2.name}')
 
         cls.image_file.close()

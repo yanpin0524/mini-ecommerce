@@ -1,21 +1,34 @@
+[tool.ruff]
+exclude = ["migrations", ".venv"]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.ruff.format]
+quote-style = "single"
+
 [tool.poetry]
-name = "mini-ecommerce"
-version = "0.1.0"
-description = ""
 authors = ["Yanpin <a131234568@gmail.com>"]
+description = ""
+name = "mini-ecommerce"
 readme = "README.md"
+version = "0.1.0"
 
 [tool.poetry.dependencies]
-python = "^3.11.8"
 django = "^4.1"
 djangorestframework = "^3.15.1"
 djangorestframework-simplejwt = "^5.3.1"
 djoser = "^2.2.2"
 pillow = "^10.2.0"
-python-dotenv = "^1.0.1"
 pymysql = "^1.1.0"
+python = "^3.11.8"
+python-dotenv = "^1.0.1"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
 
 [build-system]
-requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]

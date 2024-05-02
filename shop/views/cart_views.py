@@ -1,9 +1,9 @@
 from rest_framework import generics, status
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from shop.models import CartItem
 import shop.serializers as serializers
+from shop.models import CartItem
 
 
 class CartItemView(generics.ListAPIView, APIView):
@@ -11,7 +11,7 @@ class CartItemView(generics.ListAPIView, APIView):
 
     def post(self, request):
         data = request.data.copy()
-        data["user_id"] = request.user.id
+        data['user_id'] = request.user.id
 
         serialized_item = serializers.CartItemSerializer(data=data)
         serialized_item.is_valid(raise_exception=True)
