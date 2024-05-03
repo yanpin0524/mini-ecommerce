@@ -8,7 +8,7 @@
         <meta name="keywords" content="mini, ecommerce, shop, django" />
         <title>
             {% block page_title %}
-                mini eCommerce
+                mini-eCommerce
             {% endblock page_title %}
         </title>
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
@@ -23,7 +23,7 @@
               href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     </head>
     <body class="d-flex flex-column h-100">
-        <header>
+        <header class="sticky-top">
             {% include "layout/navbar.html" %}
         </header>
         <main class="h-100">
