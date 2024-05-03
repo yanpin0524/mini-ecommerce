@@ -1,0 +1,41 @@
+<nav class="navbar fixed-top bg-body-secondary navbar-expand-xl">
+    <div class="container-fluid">
+        <a class="navbar-brand ms-2" href="{% url "shop_page" %}">
+            <i class="bi bi-bag-fill"></i>
+            mini-eCommerce
+        </a>
+        <form class="input-group w-50" role="search">
+            <input class="form-control"
+                   type="search"
+                   placeholder="Search"
+                   aria-label="Search" />
+            <button class="btn btn-secondary" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapseContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end"
+             id="navbarCollapseContent">
+            <div class="navbar-nav">
+                <a class="nav-link m-1" href="#">
+                    <i class="bi bi-cart-fill"></i>
+                    Cart
+                </a>
+                <a class="nav-link m-1" href="#">
+                    <i class="bi bi-receipt-cutoff"></i>
+                    Order
+                </a>
+                <a class="nav-link m-1" href="#">
+                    <i class="bi bi-person-circle"></i>
+                    Profile
+                </a>
+                <a class="btn btn-primary mx-3 my-1" href="">sign in</a>
+            </div>
+        </div>
+    </div>
+</nav>
