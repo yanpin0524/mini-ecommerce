@@ -1,17 +1,38 @@
 {% extends "layout/base.html" %}
 {% block content %}
-    {% comment %} djlint:off H006 H021  {% endcomment %}
+    {% comment %} djlint:off H006 {% endcomment %}
     {% include "partials/advertisement_banner.html" %}
-    <div class="container-fluid row justify-content-center">
-        {% for product in products %}
-            <div class="card col-lg-2 m-3">
-                <img src="{{ product.image.url }}" alt="">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">${{ product.price }}</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div class="container my-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for product in products %}
+                <div class="col">
+                    <div class="card product_card">
+                        <img src="{{ product.image.url }}"
+                             alt="{{ product.name }}"
+                             class="card-img-top object-fit-cover h-50">
+                        <div class="card-body h-50">
+                            <h5 class="card-subtitle text-truncate mb-3">{{ product.name }}</h5>
+                            <p class="card-text multiline-ellipsis text-muted">{{ product.description }}</p>
+                            <a href="{% url "product_detail" product.id %}"
+                               class="stretched-link text-end text-decoration-none text-body">
+                                <h3 class="card-title pt-4">${{ product.price }}</h3>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
+    <style>
+        .product_card {
+            height: 25rem;
+        }
+
+        .multiline-ellipsis {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+    </style>
 {% endblock content %}
