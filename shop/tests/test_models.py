@@ -72,7 +72,7 @@ class ProductModelTestCase(TestCase):
 
     def test_name_field(self):
         name_field = self.product._meta.get_field('name')
-        self.assertEqual(name_field.max_length, 255)
+        self.assertEqual(name_field.max_length, 70)
 
     def test_price_field(self):
         price_field = self.product._meta.get_field('price')
