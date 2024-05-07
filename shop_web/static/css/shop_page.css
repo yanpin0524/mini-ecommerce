@@ -1,5 +1,10 @@
-.product_card {
+.product-card {
     height: 25rem;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
 }
 
 .multiline-ellipsis {

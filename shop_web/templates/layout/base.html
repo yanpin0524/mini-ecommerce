@@ -1,5 +1,6 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark" class="h-100">
+<html lang="en" class="h-100" data-bs-theme="light">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,20 +13,17 @@
             {% endblock page_title %}
         </title>
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-        <link rel="apple-touch-icon"
-              type="image/png"
-              href="/images/apple-touch-icon.png">
-        <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
-              integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
-              crossorigin="anonymous" />
+        <link rel="apple-touch-icon" type="image/x-icon" href="/images/favicon.ico">
+        {% comment %} bootstrap css {% endcomment %}
+        <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" />
+        {% comment %} bootstrap icons {% endcomment %}
         <link rel="stylesheet"
               href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
         {% block css_files %}
         {% endblock css_files %}
     </head>
     <body class="d-flex flex-column h-100">
-        <header class="sticky-top">
+        <header>
             {% include "layout/navbar.html" %}
         </header>
         <main class="flex-grow-1 p-0">
