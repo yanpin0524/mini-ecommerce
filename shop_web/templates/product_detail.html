@@ -1,0 +1,45 @@
+{% extends "layout/base.html" %}
+{% block content %}
+    {% comment %} djlint:off H006 {% endcomment %}
+    <div class="container h-100 p-4">
+        <div class="card bg-light h-100 rounded-3">
+            <div class="row h-100">
+                <img src="{{ product.image.url }}"
+                     alt="{{ product.name }}"
+                     class="col-5 object-fit-cover rounded-start p-0">
+                <div class="card-body col-7 d-flex flex-column">
+                    <h1 class="card-title">{{ product.name }}</h1>
+                    <hr class="border-2 text-info w-50 my-4">
+                    <p class="card-text fs-5 ms-3">${{ product.price }}</p>
+                    <p class="card-text multiline-ellipsis">{{ product.description }}</p>
+                    <form action="" method="post" class="mt-auto mb-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <div class="row align-items-end">
+                            <div class="col text-end">
+                                <label for="quantity" class="col-form-label fs-5 fw-bold">Quantity</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="number"
+                                       name="quantity"
+                                       min="1"
+                                       value="1"
+                                       class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <hr class="border-2">
+                        <button type="submit" class="btn btn-primary w-100">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .multiline-ellipsis {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 8;
+            overflow: hidden;
+        }
+    </style>
+{% endblock content %}
