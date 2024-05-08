@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -45,7 +46,13 @@ class User(AbstractUser):
 
 class Product(models.Model):
     name = models.CharField(max_length=70, null=False, blank=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=False,
+        blank=False,
+        validators=[MinValueValidator(0.01)],
+    )
     description = models.TextField(null=False, blank=False)
     image = models.ImageField(
         upload_to='products', null=False, blank=False, default='products/product_default.png'
@@ -58,7 +65,7 @@ class Product(models.Model):
 class CartItem(models.Model):  # 購物車中的商品
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(null=False, blank=False)
+    quantity = models.IntegerField(null=False, blank=False, validators=[MinValueValidator(1)])
 
     class Meta:
         unique_together = ('user', 'product')
@@ -76,7 +83,7 @@ class OrderItem(models.Model):  # 訂單中的商品
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
-    quantity = models.IntegerField(null=False, blank=False)
+    quantity = models.IntegerField(null=False, blank=False, validators=[MinValueValidator(1)])
 
     class Meta:
         unique_together = ('order', 'product')
