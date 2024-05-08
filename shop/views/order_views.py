@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -52,7 +53,7 @@ class SingleOrderView(generics.DestroyAPIView, APIView):
     permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request, pk):
-        order = Order.objects.get(id=pk)
+        order = get_object_or_404(Order, id=pk)
         order_items = OrderItem.objects.filter(order_id=pk)
 
         if (request.user.id != order.user_id) and (not request.user.is_superuser):
