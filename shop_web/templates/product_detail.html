@@ -1,4 +1,11 @@
 {% extends "layout/base.html" %}
+{% load static %}
+{% block page_title %}
+    {{ product.name }} | mini-eCommerce
+{% endblock page_title %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "css/product_detail.css" %}">
+{% endblock css_files %}
 {% block content %}
     {% comment %} djlint:off H006 {% endcomment %}
     <div class="container h-100 p-4">
@@ -34,12 +41,4 @@
             </div>
         </div>
     </div>
-    <style>
-        .multiline-ellipsis {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 8;
-            overflow: hidden;
-        }
-    </style>
 {% endblock content %}
