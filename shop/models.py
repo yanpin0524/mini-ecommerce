@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -49,7 +51,7 @@ class Product(models.Model):
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(0.01)],
+        validators=[MinValueValidator(Decimal('0.01'))],
     )
     description = models.TextField()
     image = models.ImageField(upload_to='products', default='products/product_default.png')
@@ -75,13 +77,15 @@ class Order(models.Model):
     delivery_status = models.BooleanField(default=False)  # False = Not Delivered, True = Delivered
 
     def __str__(self):
-        return self.id
+        return f'{self.id} ({self.user})'
 
 
-class OrderItem(models.Model):  # 訂單中的商品ß
+class OrderItem(models.Model):  # 訂單中的商品
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))]
+    )
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
 
     class Meta:
