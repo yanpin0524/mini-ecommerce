@@ -75,7 +75,7 @@ class Order(models.Model):
     delivery_status = models.BooleanField(default=False)  # False = Not Delivered, True = Delivered
 
     def __str__(self):
-        return f'order_id:{self.id} - {self.user}'
+        return self.id
 
 
 class OrderItem(models.Model):  # 訂單中的商品ß
@@ -88,4 +88,4 @@ class OrderItem(models.Model):  # 訂單中的商品ß
         unique_together = ('order', 'product')
 
     def __str__(self):
-        return f'order_id:{self.order.id} - {self.product}'
+        return f'{self.order} - {self.product}'
