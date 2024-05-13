@@ -19,20 +19,18 @@
                     <hr class="border-2 text-info w-50 my-4">
                     <p class="card-text fs-5 ms-3">${{ product.price }}</p>
                     <p class="card-text multiline-ellipsis">{{ product.description }}</p>
-                    <form action="" method="post" class="mt-auto mb-3">
+                    <form action="{% url "product_detail" product.id %}"
+                          method="post"
+                          class="mt-auto mb-3">
                         {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <p class="text-danger text-end">{{ form.non_field_errors.as_text }}</p>
+                        <p class="text-danger text-end">{{ form.quantity.errors.as_text }}</p>
                         <div class="row align-items-end">
                             <div class="col text-end">
-                                <label for="quantity" class="col-form-label fs-5 fw-bold">Quantity</label>
+                                <label for="{{ form.quantity.id_for_label }}"
+                                       class="col-form-label fs-5 fw-bold">{{ form.quantity.label }}</label>
                             </div>
-                            <div class="col-3">
-                                <input type="number"
-                                       name="quantity"
-                                       min="1"
-                                       value="1"
-                                       class="form-control form-control-sm">
-                            </div>
+                            <div class="col-3">{{ form.quantity }}</div>
                         </div>
                         <hr class="border-2">
                         <button type="submit" class="btn btn-primary w-100">Add to cart</button>

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views import View
 
 from shop.models import User
-from shop_web.form import SignInForm, SignUpForm
+from shop_web.forms.auth_forms import SignInForm, SignUpForm
 
 
 class SignInView(LoginView):

@@ -9,8 +9,6 @@ class SignInForm(AuthenticationForm):
         'invalid_login': 'Email or password is incorrect',
     }
 
-    error_class = 'is-invalid'
-
     username = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
@@ -51,7 +49,6 @@ class SignUpForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'password', 'confirm_password']
-        error_css_class = 'invalid-feedback'
 
         widgets = {
             'email': forms.EmailInput(
