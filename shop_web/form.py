@@ -1,6 +1,33 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 from shop.models import User
+
+
+class SignInForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': 'Email or password is incorrect',
+    }
+
+    error_class = 'is-invalid'
+
+    username = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'enter your email...',
+            }
+        )
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'enter your password...',
+            }
+        )
+    )
 
 
 class SignUpForm(forms.ModelForm):

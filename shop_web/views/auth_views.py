@@ -1,14 +1,16 @@
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 
 from shop.models import User
-from shop_web.form import SignUpForm
+from shop_web.form import SignInForm, SignUpForm
 
 
-class SignInView(View):
-    def get(self, request):
-        return render(request, 'sign-in.html')
+class SignInView(LoginView):
+    template_name = 'sign-in.html'
+    next_page = '/shop/'
+    authentication_form = SignInForm
 
 
 class SignUpView(View):

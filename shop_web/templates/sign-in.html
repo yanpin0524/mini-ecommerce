@@ -4,28 +4,30 @@
 {% endblock page_title %}
 {% block content %}
     <div class="container h-100">
-        <div class="card h-75 w-50 mx-auto mt-5">
-            <div class="card-body d-flex flex-column">
-                <h1 class="card-title text-center">Sign in</h1>
-                <hr class="border-2">
-                <form action=""
-                      method="post"
-                      class="d-flex flex-column align-items-center flex-grow-1">
-                    {% csrf_token %}
-                    <input type="email"
-                           name="email"
-                           placeholder="enter your email..."
-                           class="form-control w-75 my-2">
-                    <input type="password"
-                           name="password"
-                           placeholder="enter your password..."
-                           class="form-control w-75 my-2">
-                    <button type="submit" class="btn btn-primary w-75 mt-5">Sign in</button>
-                </form>
-                <hr class="border-2">
-                <p class="card-text">
-                    Don't have an account? <a href="{% url 'sign_up' %}">Sign up</a>
-                </p>
+        <div class="row justify-content-center">
+            <div class="card h-75 mt-5 col-md-10 col-lg-6">
+                <div class="card-body d-flex flex-column">
+                    <h1 class="card-title text-center">Sign in</h1>
+                    <hr class="border-2">
+                    <form action=""
+                          method="post"
+                          class="d-flex flex-column align-items-stretch flex-grow-1">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="from-group px-5">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                <p class="text-danger">{{ field.errors.as_text }}</p>
+                            </div>
+                        {% endfor %}
+                        <p class="text-danger text-center">{{ form.non_field_errors.as_text }}</p>
+                        <button type="submit" class="btn btn-primary align-self-center w-75 mt-auto">Sign in</button>
+                    </form>
+                    <hr class="border-2">
+                    <p class="card-text">
+                        Don't have an account? <a href="{% url 'sign_up' %}">Sign up</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
