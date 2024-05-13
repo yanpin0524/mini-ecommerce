@@ -25,19 +25,25 @@
                 </button>
             </form>
             <div class="navbar-nav align-items-center">
-                <a class="nav-link m-1" href="#">
-                    <i class="bi bi-cart-fill"></i>
-                    Cart
-                </a>
-                <a class="nav-link m-1" href="#">
-                    <i class="bi bi-receipt-cutoff"></i>
-                    Order
-                </a>
-                <a class="nav-link m-1" href="#">
-                    <i class="bi bi-person-circle"></i>
-                    Profile
-                </a>
-                <a class="btn btn-primary my-1" href="{% url "sign_in" %}">sign in</a>
+                {% if request.user.is_authenticated %}
+                    <a class="nav-link m-1" href="#">
+                        <i class="bi bi-cart-fill"></i>
+                        Cart
+                    </a>
+                    <a class="nav-link m-1" href="#">
+                        <i class="bi bi-receipt-cutoff"></i>
+                        Order
+                    </a>
+                    <a class="nav-link m-1" href="#">
+                        <i class="bi bi-person-circle"></i>
+                        Profile
+                    </a>
+                    <a class="btn btn-primary my-1" href="{% url "logout" %}">Logout</a>
+                {% elif request.path == "/sign-in/" %}
+                    <a class="btn btn-primary my-1" href="{% url "sign_up" %}">Sign up</a>
+                {% else %}
+                    <a class="btn btn-primary my-1" href="{% url "sign_in" %}">Sign in</a>
+                {% endif %}
             </div>
         </div>
     </div>
