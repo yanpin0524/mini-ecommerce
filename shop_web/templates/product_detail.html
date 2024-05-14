@@ -19,7 +19,7 @@
                     <hr class="border-2 text-info w-50 my-4">
                     <p class="card-text fs-5 ms-3">${{ product.price }}</p>
                     <p class="card-text multiline-ellipsis">{{ product.description }}</p>
-                    <form action="{% url "product_detail" product.id %}"
+                    <form action="{% url 'cart-add' product.id %}"
                           method="post"
                           class="mt-auto mb-3">
                         {% csrf_token %}
