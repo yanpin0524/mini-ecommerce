@@ -12,6 +12,7 @@
             <p class="col m-0 text-center">price</p>
             <p class="col m-0 text-center">quantity</p>
             <p class="col m-0 text-center">total</p>
+            <p class="col m-0 text-center">remove</p>
         </div>
         <hr class="border-2">
         {% for cart_item in cart %}
@@ -25,6 +26,12 @@
                 <p class="col m-0 text-center">${{ cart_item.product.price }}</p>
                 <p class="col m-0 text-center">{{ cart_item.quantity }}</p>
                 <p class="col m-0 text-center">${{ cart_item.total }}</p>
+                <form action="#" method="post" class="col text-center">
+                    {% csrf_token %}
+                    <button type="submit" class="btn rounded-3">
+                        <i class="bi bi-trash-fill text-info"></i>
+                    </button>
+                </form>
             </div>
             {% if not forloop.last %}<hr class="border-1">{% endif %}
         {% empty %}
