@@ -7,16 +7,16 @@ from shop.models import User
 from shop_web.forms.auth_forms import SignInForm, SignUpForm
 
 
-class SignInView(LoginView):
-    template_name = 'sign-in.html'
-    next_page = '/shop/'
+class SignIn(LoginView):
+    template_name = 'sign_in.html'
+    next_page = '/products/'
     authentication_form = SignInForm
 
 
-class SignUpView(View):
+class SignUp(View):
     def get(self, request):
         form = SignUpForm()
-        return render(request, 'sign-up.html', {'form': form})
+        return render(request, 'sign_up.html', {'form': form})
 
     def post(self, request):
         form = SignUpForm(request.POST)
@@ -29,4 +29,4 @@ class SignUpView(View):
             User.objects.create_user(email=email, password=password)
             return HttpResponseRedirect('/sign-in/')
 
-        return render(request, 'sign-up.html', {'form': form})
+        return render(request, 'sign_up.html', {'form': form})
