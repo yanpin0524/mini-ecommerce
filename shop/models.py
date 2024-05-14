@@ -65,11 +65,15 @@ class CartItem(models.Model):  # 購物車中的商品
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
 
-    class Meta:
-        unique_together = ('user', 'product')
+    @property
+    def total(self):
+        return self.product.price * self.quantity
 
     def __str__(self):
         return f'{self.user} - {self.product}'
+
+    class Meta:
+        unique_together = ('user', 'product')
 
 
 class Order(models.Model):
@@ -88,8 +92,8 @@ class OrderItem(models.Model):  # 訂單中的商品
     )
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
 
-    class Meta:
-        unique_together = ('order', 'product')
-
     def __str__(self):
         return f'{self.order} - {self.product}'
+
+    class Meta:
+        unique_together = ('order', 'product')

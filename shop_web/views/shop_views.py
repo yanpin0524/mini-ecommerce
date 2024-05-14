@@ -33,3 +33,10 @@ class ProductDetailView(View):
             CartItem.objects.create(user=request.user, product=product, quantity=quantity)
 
         return render(request, 'product_detail.html', {'product': product, 'form': form})
+
+
+class MyCartView(View):
+    def get(self, request):
+        cart = CartItem.objects.filter(user=request.user)
+        cart_total = sum([item.total for item in cart])
+        return render(request, 'my_cart.html', {'cart': cart, 'cart_total': cart_total})
