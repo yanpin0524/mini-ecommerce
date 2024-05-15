@@ -16,9 +16,9 @@ class TestShopUrls(TestCase):
         )
 
     def test_shop_page(self):
-        response = self.client.get('/shop/')
+        response = self.client.get('/products/')
         self.assertEqual(response.status_code, 200)
 
     def test_product_detail_page(self):
-        response = self.client.get(f'/shop/{self.product.id}/')
+        response = self.client.get(f'/products/{self.product.id}/')
         self.assertEqual(response.status_code, 200)
