@@ -12,6 +12,6 @@ urlpatterns = [
     path('cart/', CartList.as_view(), name='cart-list'),
     path('sign-in/', SignIn.as_view(), name='sign-in'),
     path('sign-up/', SignUp.as_view(), name='sign-up'),
-    path('logout/', LogoutView.as_view(next_page='/sign-in/'), name='logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('', RedirectView.as_view(pattern_name='product-list')),
 ]

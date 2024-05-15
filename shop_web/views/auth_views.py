@@ -1,6 +1,5 @@
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import View
 
 from shop.models import User
@@ -9,7 +8,6 @@ from shop_web.forms.auth_forms import SignInForm, SignUpForm
 
 class SignIn(LoginView):
     template_name = 'sign_in.html'
-    next_page = '/products/'
     authentication_form = SignInForm
 
 
@@ -27,6 +25,6 @@ class SignUp(View):
             password = cleaned_form.get('password')
 
             User.objects.create_user(email=email, password=password)
-            return HttpResponseRedirect('/sign-in/')
+            return redirect('sign-in')
 
         return render(request, 'sign_up.html', {'form': form})
