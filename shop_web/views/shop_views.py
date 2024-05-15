@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
 from shop.models import CartItem, Product
@@ -12,11 +12,14 @@ class ProductList(View):
 
 
 class ProductDetail(View):
-    def get(self, request, product_id, form=None):
+    def get(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
+        form = CartAddForm()
 
-        if form is None:
-            form = CartAddForm()
+        if request.session.get('form_content'):
+            form = CartAddForm(request.session.get('form_content'))
+
+            del request.session['form_content']
 
         return render(request, 'product_detail.html', {'product': product, 'form': form})
 
@@ -27,15 +30,18 @@ class CartAdd(View):
         product = get_object_or_404(Product, id=product_id)
         form = CartAddForm(request.POST)
 
-        if CartItem.objects.filter(user=user, product=product).exists():
-            # TODO: redirect to cart-edit path, then update quantity.
-            form.add_error(None, 'Product already in cart!')
-
         if form.is_valid():
             quantity = form.cleaned_data.get('quantity')
-            CartItem.objects.create(user=user, product=product, quantity=quantity)
 
-        return ProductDetail.get(self, request, product_id, form)
+            cart_item, created = CartItem.objects.get_or_create(
+                user=user, product=product, defaults={'quantity': 0}
+            )
+
+            cart_item.quantity += quantity
+            cart_item.save()
+
+        request.session['form_content'] = request.POST
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class CartList(View):
