@@ -20,7 +20,7 @@
                         <div class="card-body h-50">
                             <h5 class="card-subtitle text-truncate mb-3 fw-bold">{{ product.name }}</h5>
                             <p class="card-text multiline-ellipsis text-muted">{{ product.description }}</p>
-                            <a href="{% url "product_detail" product.id %}"
+                            <a href="{% url "product-detail" product.id %}"
                                class="stretched-link text-end text-decoration-none text-body">
                                 <h3 class="card-title pt-4">${{ product.price }}</h3>
                             </a>
