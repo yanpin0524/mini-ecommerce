@@ -62,7 +62,7 @@ class ProductModelTestCase(TestCase):
     @classmethod
     def tearDownClass(cls):
         Product.objects.all().delete()
-        os.remove(f'images/products/{cls.test_image.name}')
+        os.remove(f'media/products/{cls.test_image.name}')
 
     def test_create_product(self):
         self.assertEqual(self.product.name, 'product1')
@@ -104,7 +104,7 @@ class CartItemModelTestCase(TestCase):
         Product.objects.all().delete()
         User.objects.all().delete()
 
-        os.remove(f'images/products/{cls.test_image.name}')
+        os.remove(f'media/products/{cls.test_image.name}')
 
     def test_create_cart_item(self):
         self.assertEqual(self.cart_item.user, self.user)
@@ -159,7 +159,7 @@ class OrderItemModelTestCase(TestCase):
         Product.objects.all().delete()
         User.objects.all().delete()
 
-        os.remove(f'images/products/{cls.test_image.name}')
+        os.remove(f'media/products/{cls.test_image.name}')
 
     def test_create_order_item(self):
         self.assertEqual(self.order_item.order, self.order)
