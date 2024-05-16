@@ -26,7 +26,9 @@
                 <p class="col m-0 text-center">${{ cart_item.product.price }}</p>
                 <p class="col m-0 text-center">{{ cart_item.quantity }}</p>
                 <p class="col m-0 text-center">${{ cart_item.total }}</p>
-                <form action="#" method="post" class="col text-center">
+                <form action="{% url 'cart-remove' cart_item.product.id %}"
+                      method="post"
+                      class="col text-center">
                     {% csrf_token %}
                     <button type="submit" class="btn rounded-3">
                         <i class="bi bi-trash-fill text-info"></i>

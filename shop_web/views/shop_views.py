@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from shop.models import CartItem, Product
@@ -24,6 +26,7 @@ class ProductDetail(View):
         return render(request, 'product_detail.html', {'product': product, 'form': form})
 
 
+@method_decorator([login_required], name='dispatch')
 class CartAdd(View):
     def post(self, request, product_id):
         user = request.user
@@ -44,6 +47,19 @@ class CartAdd(View):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
+@method_decorator([login_required], name='dispatch')
+class CartRemove(View):
+    def post(self, request, product_id):
+        user = request.user
+        product = get_object_or_404(Product, id=product_id)
+
+        cart_item = get_object_or_404(CartItem, user=user, product=product)
+        cart_item.delete()
+
+        return redirect('cart-list')
+
+
+@method_decorator([login_required], name='dispatch')
 class CartList(View):
     def get(self, request):
         cart = CartItem.objects.filter(user=request.user)
