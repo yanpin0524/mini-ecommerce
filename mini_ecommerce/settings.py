@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'mini_ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'mini_ecommerce_db'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': os.getenv('DATABASE_NAME', 'mini_ecommerce_db'),
+        'USER': os.getenv('MYSQL_USERNAME', 'root'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'password'),
+        'HOST': os.getenv('MYSQL_HOST', 'localhost'),
+        'PORT': os.getenv('MYSQL_PORT', '3306'),
     }
 }
 
