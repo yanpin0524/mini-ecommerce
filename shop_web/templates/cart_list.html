@@ -49,7 +49,8 @@
                 <p class="m-0 fw-bold fs-4 me-3">${{ cart_total }}</p>
             </div>
             <hr class="border-2">
-            <a href="#" class="btn btn-outline-info rounded-2 w-100">Checkout</a>
+            <a href="{% url "checkout" %}"
+               class="btn btn-outline-info rounded-2 w-100">Checkout</a>
         </div>
     </div>
     <style>
