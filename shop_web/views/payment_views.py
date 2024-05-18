@@ -14,12 +14,13 @@ load_dotenv()
 
 class Checkout(View):
     def get(self, request):
+        host = os.getenv('HOST', 'http://127.0.0.1:8000')
         ecpay = ECPayAllInOne(
             MerchantID=os.getenv('MERCHANTID'),
             HashKey=os.getenv('HASHKEY'),
             HashIV=os.getenv('HASHIV'),
-            ReturnURL=reverse('checkout-return'),
-            ClientBackURL=reverse('checkout-client-back'),
+            ReturnURL=f'{host}{reverse("checkout-return")}',
+            ClientBackURL=f'{host}{reverse("checkout-client-back")}',
         )
 
         return HttpResponse(
