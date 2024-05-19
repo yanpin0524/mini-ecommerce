@@ -9,7 +9,9 @@ spec.loader.exec_module(module)
 
 
 class ECPayAllInOne:
-    def __init__(self, MerchantID, HashKey, HashIV, ReturnURL='', ClientBackURL=''):
+    def __init__(
+        self, MerchantID, HashKey, HashIV, ReturnURL='', ClientBackURL='', OrderResultURL=''
+    ):
         self.MerchantID = MerchantID
         self.HashKey = HashKey
         self.HashIV = HashIV
@@ -19,6 +21,7 @@ class ECPayAllInOne:
 
         self.ReturnURL = ReturnURL
         self.ClientBackURL = ClientBackURL
+        self.OrderResultURL = OrderResultURL
 
     def create_order(self, TradeDesc: str, ItemName: str, TotalAmount: int):
         order_params = {
@@ -30,8 +33,10 @@ class ECPayAllInOne:
             'TotalAmount': TotalAmount,
             'ReturnURL': self.ReturnURL,
             'ClientBackURL': self.ClientBackURL,
+            'OrderResultURL': self.OrderResultURL,
             'ChoosePayment': 'ALL',
             'EncryptType': 1,
+            'NeedExtraPaidInfo': 'Y',
         }
 
         try:

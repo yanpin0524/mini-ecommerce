@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 
 from django.http import HttpResponse
 from django.urls import reverse
@@ -14,13 +15,14 @@ load_dotenv()
 
 class Checkout(View):
     def get(self, request):
-        host = os.getenv('HOST', 'http://127.0.0.1:8000')
+        host = os.getenv('HOST', 'http://localhost:8000')
         ecpay = ECPayAllInOne(
             MerchantID=os.getenv('MERCHANTID'),
             HashKey=os.getenv('HASHKEY'),
             HashIV=os.getenv('HASHIV'),
             ReturnURL=f'{host}{reverse("checkout-return")}',
-            ClientBackURL=f'{host}{reverse("checkout-client-back")}',
+            ClientBackURL=f'{host}{reverse("cart-list")}',
+            OrderResultURL=f'{host}{reverse("checkout-client-back")}',
         )
 
         return HttpResponse(
@@ -30,8 +32,9 @@ class Checkout(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CheckoutReturn(View):
+    # ? 似乎沒有用到
     def post(self, request):
-        print(request.POST)
+        pprint(request.POST.dict())
 
         ecpay = ECPayAllInOne(
             MerchantID=os.getenv('ECPAY_MERCHANT_ID'),
@@ -65,9 +68,12 @@ class CheckoutClientBack(View):
         return_code = request.POST.get('RtnCode')
 
         check_mac_value = ecpay.generate_check_value(res)
-
+        pprint(res)
         if back_check_mac_value == check_mac_value and return_code == '1':
             # save to order model
             return HttpResponse(return_msg)
 
         return HttpResponse(return_msg)
+
+    def get(self, request):
+        return HttpResponse('<h1>交易完成</h1>')
