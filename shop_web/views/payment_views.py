@@ -8,6 +8,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
 
+from shop.models import Order
 from shop_web.services.ecpay_service import ECPayAllInOne
 
 load_dotenv()
@@ -20,9 +21,9 @@ class Checkout(View):
             MerchantID=os.getenv('MERCHANTID'),
             HashKey=os.getenv('HASHKEY'),
             HashIV=os.getenv('HASHIV'),
-            ReturnURL=f'{host}{reverse("checkout-return")}',
+            ReturnURL=f'{host}{reverse("product-list")}',
             ClientBackURL=f'{host}{reverse("cart-list")}',
-            OrderResultURL=f'{host}{reverse("checkout-client-back")}',
+            # OrderResultURL=f'{host}{reverse("checkout-client-back")}',
         )
 
         return HttpResponse(
@@ -35,7 +36,7 @@ class CheckoutReturn(View):
     # ? 似乎沒有用到
     def post(self, request):
         pprint(request.POST.dict())
-
+        Order.objects.create(user=request.user)
         ecpay = ECPayAllInOne(
             MerchantID=os.getenv('ECPAY_MERCHANT_ID'),
             HashKey=os.getenv('ECPAY_HASH_KEY'),
@@ -47,7 +48,7 @@ class CheckoutReturn(View):
         check_mac_value = ecpay.generate_check_value(res)
 
         if back_check_mac_value == check_mac_value:
-            return HttpResponse('0|Fail')
+            return HttpResponse('1|OK')
 
         return HttpResponse('0|Fail')
 
