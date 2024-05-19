@@ -47,7 +47,7 @@ class CheckoutReturn(View):
         check_mac_value = ecpay.generate_check_value(res)
 
         if back_check_mac_value == check_mac_value:
-            return HttpResponse('1|OK')
+            return HttpResponse('0|Fail')
 
         return HttpResponse('0|Fail')
 
