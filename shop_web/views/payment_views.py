@@ -8,7 +8,6 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
 
-from shop.models import Order
 from shop_web.services.ecpay_service import ECPayAllInOne
 
 load_dotenv()
@@ -18,12 +17,12 @@ class Checkout(View):
     def get(self, request):
         host = os.getenv('HOST', 'http://localhost:8000')
         ecpay = ECPayAllInOne(
-            MerchantID=os.getenv('MERCHANTID'),
-            HashKey=os.getenv('HASHKEY'),
-            HashIV=os.getenv('HASHIV'),
-            ReturnURL=f'{host}{reverse("product-list")}',
+            MerchantID='2000132',  # 測試用帳號
+            HashKey='5294y06JbISpM5x9',
+            HashIV='v77hoKGq4kWxNNIS',
+            ReturnURL=f'{host}{reverse("checkout-return")}',
             ClientBackURL=f'{host}{reverse("cart-list")}',
-            # OrderResultURL=f'{host}{reverse("checkout-client-back")}',
+            OrderResultURL=f'{host}{reverse("checkout-client-back")}',
         )
 
         return HttpResponse(
@@ -33,21 +32,18 @@ class Checkout(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CheckoutReturn(View):
-    # ? 似乎沒有用到
     def post(self, request):
-        pprint(request.POST.dict())
-        Order.objects.create(user=request.user)
-        ecpay = ECPayAllInOne(
-            MerchantID=os.getenv('ECPAY_MERCHANT_ID'),
-            HashKey=os.getenv('ECPAY_HASH_KEY'),
-            HashIV=os.getenv('ECPAY_HASH_IV'),
+        ecpay_payment_sdk = ECPayAllInOne(
+            MerchantID='2000132',  # 測試用帳號
+            HashKey='5294y06JbISpM5x9',
+            HashIV='v77hoKGq4kWxNNIS',
         ).ecpay_payment_sdk
 
-        res = request.POST.dict()
-        back_check_mac_value = request.POST.get('CheckMacValue')
-        check_mac_value = ecpay.generate_check_value(res)
+        post_data = request.POST.dict()
+        received_check_mac_value = post_data.get('CheckMacValue')
+        calculated_check_mac_value = ecpay_payment_sdk.generate_check_value(post_data)
 
-        if back_check_mac_value == check_mac_value:
+        if received_check_mac_value == calculated_check_mac_value:
             return HttpResponse('1|OK')
 
         return HttpResponse('0|Fail')
@@ -56,25 +52,20 @@ class CheckoutReturn(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class CheckoutClientBack(View):
     def post(self, request):
-        ecpay = ECPayAllInOne(
-            MerchantID=os.getenv('ECPAY_MERCHANT_ID'),
-            HashKey=os.getenv('ECPAY_HASH_KEY'),
-            HashIV=os.getenv('ECPAY_HASH_IV'),
+        ecpay_payment_sdk = ECPayAllInOne(
+            MerchantID='2000132',  # 測試用帳號
+            HashKey='5294y06JbISpM5x9',
+            HashIV='v77hoKGq4kWxNNIS',
         ).ecpay_payment_sdk
 
-        res = request.POST.dict()
-        back_check_mac_value = request.POST.get('CheckMacValue')
-        # order_id = request.POST.get('MerchantTradeNo')
-        return_msg = request.POST.get('RtnMsg')
-        return_code = request.POST.get('RtnCode')
+        post_data = request.POST.dict()
+        received_check_mac_value = post_data.get('CheckMacValue')
+        return_message = post_data.get('RtnMsg')
+        return_code = post_data.get('RtnCode')
 
-        check_mac_value = ecpay.generate_check_value(res)
-        pprint(res)
-        if back_check_mac_value == check_mac_value and return_code == '1':
-            # save to order model
-            return HttpResponse(return_msg)
+        calculated_check_mac_value = ecpay_payment_sdk.generate_check_value(post_data)
 
-        return HttpResponse(return_msg)
+        if received_check_mac_value == calculated_check_mac_value and return_code == '1':
+            pprint(post_data)
 
-    def get(self, request):
-        return HttpResponse('<h1>交易完成</h1>')
+        return HttpResponse(return_message)
