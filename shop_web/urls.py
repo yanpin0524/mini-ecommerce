@@ -3,13 +3,13 @@ from django.urls import path
 from django.views.generic.base import RedirectView
 
 from shop_web.views.auth_views import SignIn, SignUp
-from shop_web.views.payment_views import Checkout, CheckoutClientBack, CheckoutReturn
+from shop_web.views.checkout_views import Checkout, CheckoutResult, CheckoutServerReturn
 from shop_web.views.shop_views import CartAdd, CartList, CartRemove, ProductDetail, ProductList
 
 urlpatterns = [
     path('checkout/', Checkout.as_view(), name='checkout'),
-    path('checkout/return/', CheckoutReturn.as_view(), name='checkout-return'),
-    path('checkout/back/', CheckoutClientBack.as_view(), name='checkout-client-back'),
+    path('checkout/return/', CheckoutServerReturn.as_view(), name='checkout-return'),
+    path('checkout/result/', CheckoutResult.as_view(), name='checkout-result'),
     path('products/<int:product_id>/', ProductDetail.as_view(), name='product-detail'),
     path('products/', ProductList.as_view(), name='product-list'),
     path('cart/<int:product_id>/add/', CartAdd.as_view(), name='cart-add'),
