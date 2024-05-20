@@ -1,7 +1,6 @@
-from decimal import Decimal
+from datetime import datetime
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -48,11 +47,7 @@ class User(AbstractUser):
 
 class Product(models.Model):
     name = models.CharField(max_length=70)
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))],
-    )
+    price = models.PositiveIntegerField()
     description = models.TextField()
     image = models.ImageField(upload_to='products', default='products/product_default.png')
 
@@ -63,7 +58,7 @@ class Product(models.Model):
 class CartItem(models.Model):  # 購物車中的商品
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(validators=[MinValueValidator(1)])
+    quantity = models.PositiveIntegerField()
 
     @property
     def total(self):
@@ -76,21 +71,24 @@ class CartItem(models.Model):  # 購物車中的商品
         unique_together = ('user', 'product')
 
 
+def generate_order_no():
+    return datetime.now().strftime('NO%Y%m%d%H%M%S')
+
+
 class Order(models.Model):
+    order_no = models.CharField(max_length=20, unique=True, default=generate_order_no)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     delivery_status = models.BooleanField(default=False)  # False = Not Delivered, True = Delivered
+    total = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f'{self.id} ({self.user})'
+        return self.order_no
 
 
 class OrderItem(models.Model):  # 訂單中的商品
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))]
-    )
-    quantity = models.IntegerField(validators=[MinValueValidator(1)])
+    quantity = models.PositiveIntegerField()
 
     def __str__(self):
         return f'{self.order} - {self.product}'

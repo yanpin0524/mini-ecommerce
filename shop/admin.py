@@ -17,7 +17,7 @@ class CartItemAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'delivery_status')
+    list_display = ('order_no', 'user', 'delivery_status', 'total')
 
 
 class OrderItemAdmin(admin.ModelAdmin):
