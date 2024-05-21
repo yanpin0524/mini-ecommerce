@@ -9,7 +9,10 @@ from shop_web.forms.cart_forms import CartAddForm
 
 class ProductList(View):
     def get(self, request):
-        products = Product.objects.all()
+        if request.GET.get('search'):
+            products = Product.objects.filter(name__icontains=request.GET.get('search'))
+        else:
+            products = Product.objects.all()
         return render(request, 'product_list.html', {'products': products})
 
 
