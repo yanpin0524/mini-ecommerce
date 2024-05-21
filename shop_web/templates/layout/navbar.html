@@ -26,6 +26,7 @@
             </form>
             <div class="navbar-nav align-items-center">
                 {% if request.user.is_authenticated %}
+                    <p class="nav-text m-1 text-truncate">{{ request.user.email }}</p>
                     <a class="nav-link m-1" href="{% url "cart-list" %}">
                         <i class="bi bi-cart-fill"></i>
                         Cart
@@ -33,10 +34,6 @@
                     <a class="nav-link m-1" href="{% url "order-list" %}">
                         <i class="bi bi-receipt-cutoff"></i>
                         Order
-                    </a>
-                    <a class="nav-link m-1" href="#">
-                        <i class="bi bi-person-circle"></i>
-                        Profile
                     </a>
                     <a class="btn btn-primary my-1" href="{% url "logout" %}">Logout</a>
                 {% elif request.path == "/sign-in/" %}
