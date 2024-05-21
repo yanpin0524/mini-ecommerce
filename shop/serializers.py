@@ -40,7 +40,7 @@ class OrderSerializer(ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'delivered']
+        exclude = ['delivery_status']
 
 
 class OrderDeliveryStatusSerializer(ModelSerializer):
@@ -48,21 +48,12 @@ class OrderDeliveryStatusSerializer(ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'delivered']
+        fields = ['id', 'order_no', 'delivered']
 
 
 class OrderItemSerializer(ModelSerializer):
-    total = serializers.SerializerMethodField(method_name='get_total')
-
-    order = OrderSerializer(read_only=True)
     product = ProductSerializer(read_only=True)
-
-    order_id = serializers.IntegerField(write_only=True)
-    product_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = OrderItem
-        fields = ['id', 'order', 'product', 'price', 'quantity', 'total', 'order_id', 'product_id']
-
-    def get_total(self, obj):
-        return obj.price * obj.quantity
+        fields = ['id', 'order', 'product', 'quantity', 'total']
