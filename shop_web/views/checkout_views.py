@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -78,17 +79,27 @@ class CheckoutResult(View):
 
         post_data = request.POST.dict()
 
+        order_date = datetime.strptime(post_data.get('TradeDate'), '%Y/%m/%d %H:%M:%S')
+        print(order_date, type(order_date))
+
         received_check_mac_value = post_data.get('CheckMacValue')
         calculated_check_mac_value = ecpay_payment_sdk.generate_check_value(post_data)
 
         return_code = post_data.get('RtnCode')
 
         if received_check_mac_value == calculated_check_mac_value and return_code == '1':
-            user_id = int(post_data.get('CustomField1'))
             order_no = post_data.get('MerchantTradeNo')
-            total = post_data.get('TradeAmt')
 
-            order = Order.objects.create(user_id=user_id, order_no=order_no, total=total)
+            if Order.objects.filter(order_no=order_no).exists():
+                return render(request, 'checkout_result.html', {'order_detail': post_data})
+
+            user_id = int(post_data.get('CustomField1'))
+            total = post_data.get('TradeAmt')
+            created_at = datetime.strptime(post_data.get('TradeDate'), '%Y/%m/%d %H:%M:%S')
+
+            order = Order.objects.create(
+                user_id=user_id, order_no=order_no, total=total, created_at=created_at
+            )
             order_items = []
             cart = CartItem.objects.filter(user_id=user_id)
 

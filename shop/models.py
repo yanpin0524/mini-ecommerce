@@ -80,6 +80,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     delivery_status = models.BooleanField(default=False)  # False = Not Delivered, True = Delivered
     total = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField()
 
     def __str__(self):
         return self.order_no

@@ -4,9 +4,11 @@ from django.views.generic.base import RedirectView
 
 from shop_web.views.auth_views import SignIn, SignUp
 from shop_web.views.checkout_views import Checkout, CheckoutResult, CheckoutServerReturn
+from shop_web.views.order_views import OrderList
 from shop_web.views.shop_views import CartAdd, CartList, CartRemove, ProductDetail, ProductList
 
 urlpatterns = [
+    path('orders/', OrderList.as_view(), name='order-list'),
     path('checkout/', Checkout.as_view(), name='checkout'),
     path('checkout/return/', CheckoutServerReturn.as_view(), name='checkout-return'),
     path('checkout/result/', CheckoutResult.as_view(), name='checkout-result'),
