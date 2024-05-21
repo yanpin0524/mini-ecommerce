@@ -1,0 +1,12 @@
+{% comment %} djlint:off H006 {% endcomment %}
+<div class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        {% for item in '123'|make_list %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="https://fakeimg.pl/4000x400/?text=Advertisement{{ item }}"
+                     class="d-block w-100"
+                     alt="advertisement{{ item }}">
+            </div>
+        {% endfor %}
+    </div>
+</div>

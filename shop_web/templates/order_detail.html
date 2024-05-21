@@ -1,0 +1,38 @@
+{% extends "layout/base.html" %}
+{% block page_title %}
+    {{ order.order_no }} | mini-eCommerce
+{% endblock page_title %}
+{% block content %}
+    <a href="{% url 'order-list' %}"
+       class="btn btn-outline-info m-3 fw-bold"><i class="bi bi-arrow-left"></i> Back</a>
+    <div class="container d-flex flex-column align-items-center m-5">
+        <h1 class="fw-bold mb-4">{{ order.order_no }}</h1>
+        <table class="table table-striped w-75">
+            <thead>
+                <tr class="row border border-2">
+                    <th class="col">Name</th>
+                    <th class="col">Price</th>
+                    <th class="col">Quantity</th>
+                    <th class="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                    <tr class="row border border-2 border-top-0">
+                        <td class="col">{{ item.product.name }}</td>
+                        <td class="col">{{ item.product.price }}</td>
+                        <td class="col">{{ item.quantity }}</td>
+                        <td class="col">{{ item.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="row mt-2">
+                    <td class="col-8"></td>
+                    <td class="col-1 fs-4 fw-bold">Total</td>
+                    <td class="col-1 fs-4 fw-bold">{{ order.total }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock content %}

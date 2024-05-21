@@ -69,7 +69,7 @@ class TestProductEndpoints(TestCase):
 
         response = self.client.post('/api/products/', data, format='multipart')
 
-        os.remove(f'images/products/{self.image2.name}')
+        os.remove(f'media/products/{self.image2.name}')
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Product.objects.count(), 2)
@@ -118,7 +118,7 @@ class TestProductEndpoints(TestCase):
         )
         response = self.client.delete(f'/api/products/{product_for_deletion.id}/')
 
-        os.remove(f'images/products/{image3.name}')
+        os.remove(f'media/products/{image3.name}')
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Product.objects.count(), 1)
@@ -134,6 +134,6 @@ class TestProductEndpoints(TestCase):
         Product.objects.all().delete()
         User.objects.all().delete()
 
-        os.remove(f'images/products/{cls.image.name}')
+        os.remove(f'media/products/{cls.image.name}')
 
         cls.image_file.close()

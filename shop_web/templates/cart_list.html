@@ -1,0 +1,64 @@
+{% extends "layout/base.html" %}
+{% block page_title %}
+    My Cart | mini-eCommerce
+{% endblock page_title %}
+{% block content %}
+    {% comment %} djlint:off H006 {% endcomment %}
+    <div class="container mt-5 mb-3">
+        <h1>Cart</h1>
+        <hr class="border-2">
+        <div class="row ps-1">
+            <p class="col-8 m-0">cart items</p>
+            <p class="col m-0 text-center">price</p>
+            <p class="col m-0 text-center">quantity</p>
+            <p class="col m-0 text-center">total</p>
+            <p class="col m-0 text-center">remove</p>
+        </div>
+        <hr class="border-2">
+        {% for cart_item in cart %}
+            <div class="row ps-1 align-items-center">
+                <div class="col-8 d-flex align-items-center">
+                    <img src="{{ cart_item.product.image.url }}"
+                         alt="{{ cart_item.product.name }}"
+                         class="product-img object-fit-cover me-3">
+                    <p class="m-0 fs-5">{{ cart_item.product.name }}</p>
+                </div>
+                <p class="col m-0 text-center">${{ cart_item.product.price }}</p>
+                <p class="col m-0 text-center">{{ cart_item.quantity }}</p>
+                <p class="col m-0 text-center">${{ cart_item.total }}</p>
+                <form action="{% url 'cart-remove' cart_item.product.id %}"
+                      method="post"
+                      class="col text-center">
+                    {% csrf_token %}
+                    <button type="submit" class="btn rounded-3">
+                        <i class="bi bi-trash-fill text-info"></i>
+                    </button>
+                </form>
+            </div>
+            {% if not forloop.last %}<hr class="border-1">{% endif %}
+        {% empty %}
+            <div class="text-center my-5">
+                <h2>Nothing at the moment...</h2>
+                <a href="{% url "product-list" %}">Go to buy something</a>
+            </div>
+        {% endfor %}
+        <hr class="border-4">
+        <div class="container w-25 me-0">
+            <div class="d-flex justify-content-between">
+                <p class="m-0 fw-bold fs-4">Total</p>
+                <p class="m-0 fw-bold fs-4 me-3">${{ cart_total }}</p>
+            </div>
+            <hr class="border-2">
+            <form action="{% url 'checkout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-info rounded-2 w-100">Checkout</button>
+            </form>
+        </div>
+    </div>
+    <style>
+        .product-img {
+            width: 8em;
+            height: 8em;
+        }
+    </style>
+{% endblock content %}

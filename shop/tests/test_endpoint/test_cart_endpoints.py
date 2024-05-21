@@ -116,7 +116,7 @@ class TestCartEndpoints(TestCase):
         Product.objects.all().delete()
         User.objects.all().delete()
 
-        os.remove(f'images/products/{cls.image.name}')
-        os.remove(f'images/products/{cls.image2.name}')
+        os.remove(f'media/products/{cls.image.name}')
+        os.remove(f'media/products/{cls.image2.name}')
 
         cls.image_file.close()

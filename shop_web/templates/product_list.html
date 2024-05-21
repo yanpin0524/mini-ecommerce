@@ -1,0 +1,33 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block page_title %}
+    Shop | mini-eCommerce
+{% endblock page_title %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'shop_web/css/shop_page.css' %}">
+{% endblock css_files %}
+{% block content %}
+    {% comment %} djlint:off H006 {% endcomment %}
+    {% include "partials/advertisement_banner.html" %}
+    <div class="container my-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-5">
+            {% for product in products %}
+                <div class="col">
+                    <div class="card product-card rounded-3 shadow">
+                        <img src="{{ product.image.url }}"
+                             alt="{{ product.name }}"
+                             class="card-img-top object-fit-cover h-50 rounded-top">
+                        <div class="card-body h-50">
+                            <h5 class="card-subtitle text-truncate mb-3 fw-bold">{{ product.name }}</h5>
+                            <p class="card-text multiline-ellipsis text-muted">{{ product.description }}</p>
+                            <a href="{% url "product-detail" product.id %}"
+                               class="stretched-link text-end text-decoration-none text-body">
+                                <h3 class="card-title pt-4">${{ product.price }}</h3>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

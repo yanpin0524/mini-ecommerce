@@ -1,0 +1,48 @@
+<nav class="navbar bg-body-secondary navbar-expand-lg shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand ms-2" href="{% url "product-list" %}">
+            <i class="bi bi-bag-fill"></i>
+            mini-eCommerce
+        </a>
+        <button class="navbar-toggler ms-auto my-1"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapseContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between"
+             id="navbarCollapseContent">
+            <form method="get"
+                  action="{% url "product-list" %}"
+                  class="input-group my-1 w-50 mx-auto"
+                  role="search">
+                <input class="form-control"
+                       type="search"
+                       placeholder="Search"
+                       aria-label="Search"
+                       name="search" />
+                <button class="btn btn-secondary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+            <div class="navbar-nav align-items-center">
+                {% if request.user.is_authenticated %}
+                    <p class="nav-text m-1 text-truncate">{{ request.user.email }}</p>
+                    <a class="nav-link m-1" href="{% url "cart-list" %}">
+                        <i class="bi bi-cart-fill"></i>
+                        Cart
+                    </a>
+                    <a class="nav-link m-1" href="{% url "order-list" %}">
+                        <i class="bi bi-receipt-cutoff"></i>
+                        Order
+                    </a>
+                    <a class="btn btn-primary my-1" href="{% url "logout" %}">Logout</a>
+                {% elif request.path == "/sign-in/" %}
+                    <a class="btn btn-primary my-1" href="{% url "sign-up" %}">Sign up</a>
+                {% else %}
+                    <a class="btn btn-primary my-1" href="{% url "sign-in" %}">Sign in</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

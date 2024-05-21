@@ -1,0 +1,33 @@
+{% extends "layout/base.html" %}
+{% block page_title %}
+    Sign up | mini-eCommerce
+{% endblock page_title %}
+{% block content %}
+    <div class="container h-100">
+        <div class="row justify-content-center">
+            <div class="card h-75 mt-5 col-md-10 col-lg-6">
+                <div class="card-body d-flex flex-column">
+                    <h1 class="card-title text-center">Sign up</h1>
+                    <hr class="border-2">
+                    <form action="{% url "sign-up" %}"
+                          method="post"
+                          class="d-flex flex-column align-items-stretch flex-grow-1">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="from-group px-5">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                <p class="text-danger">{{ field.errors.as_text }}</p>
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary align-self-center w-75 mt-auto">Sign up</button>
+                    </form>
+                    <hr class="border-2">
+                    <p class="card-text">
+                        Already have an account? <a href="{% url 'sign-in' %}">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+import sentry_sdk
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,17 +21,31 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('django_secret_key')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # todo: 在開發完成後將 debug 改成 False
+DEBUG = os.getenv('DEBUG_MODE', 'True') == 'True'
 
-ALLOWED_HOSTS = eval(os.environ.get('allowed_hosts')) or []
+sentry_sdk.init(
+    dsn='https://cd8023cd351f97c7ee54e1dfcdd6ca31@o4507271001997312.ingest.us.sentry.io/4507271016480768',
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+CSRF_TRUSTED_ORIGINS = (
+    os.getenv('CSRF_TRUSTED_ORIGINS').split(',') if os.getenv('CSRF_TRUSTED_ORIGINS') else []
+)
 
 AUTH_USER_MODEL = 'shop.User'
 
@@ -46,6 +61,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
+    'django_seed',
+    'storages',
     'shop',
     'shop_web',
 ]
@@ -65,7 +82,9 @@ ROOT_URLCONF = 'mini_ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,11 +106,11 @@ WSGI_APPLICATION = 'mini_ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('db_name'),
-        'USER': os.environ.get('db_user'),
-        'PASSWORD': os.environ.get('db_password'),
-        'HOST': os.environ.get('db_host'),
-        'PORT': os.environ.get('db_port'),
+        'NAME': os.getenv('DATABASE_NAME', 'mini_ecommerce_db'),
+        'USER': os.getenv('MYSQL_USERNAME', 'root'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'password'),
+        'HOST': os.getenv('MYSQL_HOST', 'localhost'),
+        'PORT': os.getenv('MYSQL_PORT', '3306'),
     }
 }
 
@@ -130,15 +149,43 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = '/static/'
 
-MEDIA_ROOT = 'images/'
-MEDIA_URL = 'images/'
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'custom_storages.MediaStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'custom_storages.StaticStorage',
+    },
+}
+
+STATICFILES_LOCATION = 'static'
+MEDIAFILES_LOCATION = 'media'
+
+# AWS S3
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+AWS_S3_SIGNATURE_NAME = 's3v4'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'sign-in'
+LOGIN_REDIRECT_URL = 'product-list'
+LOGOUT_REDIRECT_URL = 'sign-in'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

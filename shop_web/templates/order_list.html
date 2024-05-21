@@ -1,0 +1,37 @@
+{% extends "layout/base.html" %}
+{% block page_title %}
+    My Orders | mini-eCommerce
+{% endblock page_title %}
+{% block content %}
+    <div class="container d-flex flex-column align-items-center m-5">
+        <h1 class="fw-bold mb-4">my orders</h1>
+        <table class="table table-hover w-75">
+            <thead>
+                <tr class="row border border-2">
+                    <th class="col">Order No</th>
+                    <th class="col">Date</th>
+                    <th class="col">Total</th>
+                    <th class="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr class="row border border-2 border-top-0">
+                        <td class="col">
+                            <a href="{% url "order-detail" order.order_no %}">{{ order.order_no }}</a>
+                        </td>
+                        <td class="col">{{ order.created_at|date:"M d, Y" }}</td>
+                        <td class="col">{{ order.total }}</td>
+                        <td class="col">
+                            {% if order.delivery_status %}
+                                Delivered
+                            {% else %}
+                                Not Delivered
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
