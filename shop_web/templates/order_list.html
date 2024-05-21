@@ -17,7 +17,9 @@
             <tbody>
                 {% for order in orders %}
                     <tr class="row border border-2 border-top-0">
-                        <td class="col">{{ order.order_no }}</td>
+                        <td class="col">
+                            <a href="{% url "order-detail" order.order_no %}">{{ order.order_no }}</a>
+                        </td>
                         <td class="col">{{ order.created_at|date:"M d, Y" }}</td>
                         <td class="col">{{ order.total }}</td>
                         <td class="col">

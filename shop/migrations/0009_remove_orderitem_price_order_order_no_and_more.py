@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='order',
             name='order_no',
-            field=models.CharField(default=shop.models.generate_order_no, max_length=20, unique=True),
+            field=models.CharField(max_length=20, unique=True),
         ),
         migrations.AddField(
             model_name='order',
