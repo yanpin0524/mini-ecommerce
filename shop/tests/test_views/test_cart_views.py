@@ -114,7 +114,6 @@ class SingleCartItemViewTestCase(TestCase):
         self.assertEqual(len(CartItem.objects.all()), 1)
 
 
-@override_settings(STORAGES={'default': {'BACKEND': 'django.core.files.storage.InMemoryStorage'}})
 class CartItemQuantityViewTestCase(TestCase):
     def setUp(self):
         self.faker = Faker()

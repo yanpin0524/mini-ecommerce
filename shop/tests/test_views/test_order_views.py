@@ -5,7 +5,6 @@ from rest_framework.test import APIClient
 from shop.models import Order, OrderItem, Product, User
 
 
-@override_settings(STORAGES={'default': {'BACKEND': 'django.core.files.storage.InMemoryStorage'}})
 class OrderViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(email='user@gmail.com', password='password')
@@ -28,7 +27,6 @@ class OrderViewTestCase(TestCase):
         self.assertEqual(len(response.data), 1)
 
 
-@override_settings(STORAGES={'default': {'BACKEND': 'django.core.files.storage.InMemoryStorage'}})
 class SingleOrderViewTestCase(TestCase):
     def setUp(self):
         self.product = Product.objects.create(
