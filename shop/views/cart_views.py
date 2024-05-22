@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 
 import shop.serializers as serializers
 from shop.models import CartItem
+from shop.permissions import IsOwnerOrIsAdmin
 
 
 class CartItemView(generics.ListAPIView, APIView):
@@ -32,8 +33,10 @@ class CartItemView(generics.ListAPIView, APIView):
 class SingleCartItemView(generics.DestroyAPIView):
     queryset = CartItem.objects.all()
     serializer_class = serializers.CartItemSerializer
+    permission_classes = [IsOwnerOrIsAdmin]
 
 
 class CartItemQuantityView(generics.UpdateAPIView):
     queryset = CartItem.objects.all()
     serializer_class = serializers.CartItemQuantitySerializer
+    permission_classes = [IsOwnerOrIsAdmin]
