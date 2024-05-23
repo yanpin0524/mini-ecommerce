@@ -12,4 +12,5 @@ urlpatterns = [
     path('orders/<int:pk>/', order_views.SingleOrderView.as_view()),
     path('orders/<int:pk>/status/', order_views.OrderDeliveryStatusView.as_view()),
     path('', include('djoser.urls.jwt')),
+    path('', include('djoser.urls')),
 ]
