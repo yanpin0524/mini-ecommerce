@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
     'djoser',
     'django_seed',
     'storages',
@@ -190,11 +191,11 @@ LOGOUT_REDIRECT_URL = 'sign-in'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -207,4 +208,12 @@ DJOSER = {
     'TOKEN_MODEL': None,
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SET_PASSWORD_RETYPE': True,
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'mini-eCommerce API',
+    'DESCRIPTION': 'This API is designed for a mini-eCommerce platform, providing a convenient\
+          and straightforward way to manage and operate a mini-eCommerce website.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
