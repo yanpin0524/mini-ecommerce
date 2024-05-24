@@ -65,7 +65,7 @@ python manage.py runserver
 ```
 
 
-## Quickly Install with Docker
+# Quickly Install with Docker
 please make sure you already have Docker on your local machine
 
 ### 1. Clone this repository
@@ -98,4 +98,4 @@ docker-compose down
 
 
 # Author
-[@yanpin0524](https://github.com/yanpin0524)
+- [@yanpin0524](https://github.com/yanpin0524)
