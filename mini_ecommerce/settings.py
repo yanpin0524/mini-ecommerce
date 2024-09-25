@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG_MODE', 'True') == 'True'
 
 sentry_sdk.init(
-    dsn='https://cd8023cd351f97c7ee54e1dfcdd6ca31@o4507271001997312.ingest.us.sentry.io/4507271016480768',
+    dsn='https://{PUT YOUR OWN SENTRY URL}.sentry.io/',
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
